@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+import subprocess
+import tempfile
+import pathlib
+import shutil
+import sys
+import re
+
+extensions = [
+    ".mp4",
+    ".mov",
+    ".gif",
+    ".webm",
+]
+executable = "HandBrakeCLI"
+
+if len(sys.argv) < 3:
+    print("Missing arguments!")
+    # print("Usage: videnc [preset] [path] [quality] [keep|delete]")
+    print("Usage: videnc [preset] [path] [keep|delete]")
+    sys.exit(1)
+preset = sys.argv[1]
+path = sys.argv[2]
+
+# quality = None
+# if len(sys.argv) > 3 and sys.argv[3].isnumeric():
+#     quality = sys.argv[3]
+
+delete = True
+if len(sys.argv) > 3 and sys.argv[3] == "keep":
+    delete = False
+
+with tempfile.TemporaryDirectory(prefix="videnc-") as tmpdir:
+    tmpdir = pathlib.Path(tmpdir)
+    for file in pathlib.Path(path).glob("**/*"):
+        if not file.is_file():
+            continue
+        if not file.suffix or file.suffix not in extensions:
+            continue
+        file_name = str(file)
+        new_file = pathlib.Path(tmpdir / (file.name + ".m4v"))
+        new_name = str(new_file)
+        dest_file = pathlib.Path(file_name + ".m4v")
+        dest_name = str(dest_file)
+        print(file_name)
+            
+        arguments = [
+            "--preset-import-gui", "-Z", preset,
+            "-i", file_name,
+            "-o", new_name
+        ]
+        stat = file.stat()
+        prev_size = stat.st_size
+        prev_mode = stat.st_mode
+        # if quality:
+        #     arguments += ["-q", quality]
+        # else:
+        #     info = subprocess.Popen(
+        #         [
+        #             "mediainfo",
+        #             str(file)
+        #         ],
+        #         stdout=subprocess.PIPE,
+        #         stderr=subprocess.STDOUT
+        #     ).communicate()[0].decode(encoding="utf-8")
+        #     if match := re.search(r"crf=([\d\.]+)", info):
+        #         arguments += ["-q", str(float(match.group(1)) + 2)]
+        proc = subprocess.Popen(
+            [
+                executable,
+                *arguments
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        log = proc.communicate()[0]
+        if proc.poll() != 0:
+            print(log)
+            break
+        if delete:
+            size = new_file.stat().st_size
+            if size > prev_size:
+                file.rename(dest_file)
+            else:
+                file.unlink()
+                subprocess.Popen(["cp", new_name, dest_name]).communicate()
+        else:
+            subprocess.Popen(["cp", new_name, dest_name]).communicate()
+        new_file.unlink()
