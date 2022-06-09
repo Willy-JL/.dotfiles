@@ -85,6 +85,11 @@ alias jctl="journalctl -p 3 -xb"
 # Recent installed packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 
+# Suspend, resume and reload kwin
+alias compsuspend="qdbus org.kde.KWin /Compositor suspend"
+alias compresume="qdbus org.kde.KWin /Compositor resume"
+alias compreload="qdbus org.kde.KWin /KWin reconfigure"
+
 # Aliases with sudo
 alias sudo='sudo '
 
