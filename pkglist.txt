@@ -3,6 +3,7 @@ exa
 expac
 fzf
 hwinfo
+mpv
 pkgfile
 reflector
 starship
