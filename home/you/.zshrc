@@ -53,6 +53,12 @@ function cd {
 alias q="exit"
 alias py="python"
 
+# Python virtual env
+function pyvenv {
+    [ ! -d "venv" ] && python -m venv venv
+    source venv/bin/activate
+}
+
 # Human readable file and dir size
 alias sizeof="du -sh"
 
