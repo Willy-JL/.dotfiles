@@ -96,6 +96,18 @@ alias compsuspend="qdbus org.kde.KWin /Compositor suspend"
 alias compresume="qdbus org.kde.KWin /Compositor resume"
 alias compreload="qdbus org.kde.KWin /KWin reconfigure"
 
+# Make and restore backup of a file as .bak
+backup() {
+    if [ "$#" -eq 1 ]; then
+        cp "$1" "$1.bak"
+    fi
+}
+restore() {
+    if [ "$#" -eq 1 ]; then
+        cp "$1" "${1:0:-4}"
+    fi
+}
+
 # Aliases with sudo
 alias sudo='sudo '
 
