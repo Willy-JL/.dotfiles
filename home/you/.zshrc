@@ -108,8 +108,8 @@ restore() {
     fi
 }
 
-# Aliases with sudo
-alias sudo='sudo '
+# Aliases with sudo, custom sudo prompt
+alias sudo='/usr/bin/sudo --prompt="$(echo -e "\e[0m\n \e[0;31m╭─\e[1;31mSUDO\e[0m: \e[1;33mpassword\e[0m for \e[1;31m$USER\e[0m@\e[31m$(cat /etc/hostname)\e[0m\n \e[0;31m╰─\e[1;31mλ\e[0m ")" '
 
 
 ##########
