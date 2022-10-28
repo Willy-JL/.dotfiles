@@ -8,10 +8,12 @@ import re
 
 extensions = [
     ".mp4",
+    ".m4v",
     ".mov",
     ".gif",
     ".webm",
 ]
+done_ext = ".done.mp4"
 executable = "HandBrakeCLI"
 
 if len(sys.argv) < 3:
@@ -35,12 +37,12 @@ with tempfile.TemporaryDirectory(prefix="videnc-") as tmpdir:
     for file in pathlib.Path(path).glob("**/*"):
         if not file.is_file():
             continue
-        if not file.suffix or file.suffix not in extensions:
+        if not file.suffix or file.suffix not in extensions or file.name.endswith(done_ext):
             continue
         file_name = str(file)
-        new_file = pathlib.Path(tmpdir / (file.name + ".m4v"))
+        new_file = pathlib.Path(tmpdir / (file.name + done_ext))
         new_name = str(new_file)
-        dest_file = pathlib.Path(file_name + ".m4v")
+        dest_file = pathlib.Path(file_name + done_ext)
         dest_name = str(dest_file)
         print(file_name)
             
