@@ -1,0 +1,12 @@
+{
+    "autosu": true,
+    "colorscheme": "atom-dark",
+    "diffgutter": true,
+    "infobar": false,
+    "mkparents": true,
+    "saveundo": true,
+    "scrollbar": true,
+    "statusformatl": "$(filename) $(modified)($(line),$(col)) $(status.paste)",
+    "statusformatr": "$(opt:fileformat) | $(opt:encoding) | type: $(opt:filetype)",
+    "tabstospaces": true
+}

@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$1" != "user" ] ; then
+if [ "$(id -u)" = "0" ] ; then
 	# Install chaotic-aur
 	if [ ! -e /etc/pacman.d/chaotic-mirrorlist ] ; then
 	    echo "Installing chaotic-aur..."
@@ -49,6 +49,7 @@ echo "Linking dotfiles..."
 [ ! -e "$HOME/.zshrc"                ] && ln -fs      "$PWD/home/you/.zshrc"                "$HOME/.zshrc"
 [ ! -e "$HOME/.config"               ] && mkdir -p                                          "$HOME/.config"
 [ ! -e "$HOME/.config/starship.toml" ] && ln -fs      "$PWD/home/you/.config/starship.toml" "$HOME/.config/starship.toml"
+[ ! -e "$HOME/.config/micro"         ] && ln -fs      "$PWD/home/you/.config/micro"         "$HOME/.config/micro"
 [ ! -e "$HOME/.config/mpv"           ] && ln -fs      "$PWD/home/you/.config/mpv"           "$HOME/.config/mpv"
 
 # Change shell
