@@ -108,8 +108,8 @@ restore() {
     fi
 }
 
-# Aliases with sudo, custom sudo prompt
-alias sudo='/usr/bin/sudo --prompt="$(echo -e "\e[0m\n \e[0;31m╭─\e[1;31mSUDO\e[0m: \e[1;33mpassword\e[0m for \e[1;31m$USER\e[0m@\e[31m$(cat /etc/hostname)\e[0m\n \e[0;31m╰─\e[1;31mλ\e[0m ")" '
+# Aliases with sudo
+alias sudo='sudo '
 
 
 ##########
@@ -117,12 +117,15 @@ alias sudo='/usr/bin/sudo --prompt="$(echo -e "\e[0m\n \e[0;31m╭─\e[1;31mSUD
 ##########
 
 
+
+# History
 HISTFILE=~/.zhistory
 HISTSIZE=50000
 SAVEHIST=10000
 
-# Starship prompt
+# Starship prompt + matching sudo prompt
 eval "$(starship init zsh)"
+export SUDO_PROMPT="$(echo -e "\e[0m\n \e[0;31m╭─\e[1;31mSUDO\e[0m: \e[1;33mpassword\e[0m for \e[1;31m$USER\e[0m@\e[31m$(cat /etc/hostname)\e[0m\n \e[0;31m╰─\e[1;31mλ\e[0m ")"
 
 # Arch Linux command-not-found support, you must have package pkgfile installed
 [[ -e /usr/share/doc/pkgfile/command-not-found.zsh ]] && source /usr/share/doc/pkgfile/command-not-found.zsh
