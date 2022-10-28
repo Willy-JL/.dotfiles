@@ -3,6 +3,7 @@ exa
 expac
 fzf
 hwinfo
+micro
 mpv
 pkgfile
 reflector
