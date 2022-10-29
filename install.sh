@@ -2,7 +2,8 @@
 
 set -e
 
-if [ "$(id -u)" = "0" ] ; then
+echo "Authenticate sudo for full install, ctrl+c for user only install"
+if sudo -v ; then
 	# Install chaotic-aur
 	if [ ! -e /etc/pacman.d/chaotic-mirrorlist ] ; then
 	    echo "Installing chaotic-aur..."
