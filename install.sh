@@ -40,7 +40,9 @@ if sudo -s exit ; then
 
 	# Link scripts
 	[ ! -e "/usr/local/bin"          ] && sudo mkdir -p                                     "/usr/local/bin"
+	[ ! -e "/usr/local/bin/logs"     ] && sudo ln -fs "$PWD/usr/local/bin/logs"             "/usr/local/bin/logs"
 	[ ! -e "/usr/local/bin/pacman-R" ] && sudo ln -fs "$PWD/usr/local/bin/pacman-R"         "/usr/local/bin/pacman-R"
+	[ ! -e "/usr/local/bin/restart"  ] && sudo ln -fs "$PWD/usr/local/bin/restart"          "/usr/local/bin/restart"
 	[ ! -e "/usr/local/bin/videnc"   ] && sudo ln -fs "$PWD/usr/local/bin/videnc"           "/usr/local/bin/videnc"
 fi
 

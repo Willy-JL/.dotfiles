@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "$1" != "" ] ; then
+    service="$1"
+else
+    service="$USER"
+fi
+
+sudo systemctl restart "$service" &
+journalctl --all -fu "$service"
