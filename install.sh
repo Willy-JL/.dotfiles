@@ -39,6 +39,7 @@ if sudo -s exit ; then
 	paru -Syu --needed $(comm -13 <(pacman -Slq | sort) <(sort pkglist.txt))
 
 	# Link scripts
+	echo "Linking scripts..."
 	[ ! -e "/usr/local/bin"          ] && sudo mkdir -p                                     "/usr/local/bin"
 	[ ! -e "/usr/local/bin/logs"     ] && sudo ln -fs "$PWD/usr/local/bin/logs"             "/usr/local/bin/logs"
 	[ ! -e "/usr/local/bin/pacman-R" ] && sudo ln -fs "$PWD/usr/local/bin/pacman-R"         "/usr/local/bin/pacman-R"
