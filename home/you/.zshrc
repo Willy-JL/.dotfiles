@@ -53,11 +53,12 @@ function cd {
 alias q="exit"
 alias py="python"
 
-# Python virtual env
+# Python shortcuts
 function pyvenv {
     [ ! -d "venv" ] && python -m venv venv
     source venv/bin/activate
 }
+alias pyreq="python -m pip install -U -r requirements.txt"
 
 # Human readable file and dir size
 alias sizeof="du -sh"
