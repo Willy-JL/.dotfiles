@@ -9,7 +9,10 @@ import re
 extensions = [
     ".mp4",
     ".m4v",
+    ".mkv",
     ".mov",
+    ".wmv",
+    ".avi",
     ".gif",
     ".webm",
 ]
