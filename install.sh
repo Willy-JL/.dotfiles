@@ -45,6 +45,7 @@ if sudo -s exit ; then
 	[ ! -e "/usr/local/bin/pacman-R" ] && sudo ln -fs "$PWD/usr/local/bin/pacman-R"         "/usr/local/bin/pacman-R"
 	[ ! -e "/usr/local/bin/restart"  ] && sudo ln -fs "$PWD/usr/local/bin/restart"          "/usr/local/bin/restart"
 	[ ! -e "/usr/local/bin/videnc"   ] && sudo ln -fs "$PWD/usr/local/bin/videnc"           "/usr/local/bin/videnc"
+	[ ! -e "/usr/local/bin/vidstab"  ] && sudo ln -fs "$PWD/usr/local/bin/vidstab"          "/usr/local/bin/vidstab"
 fi
 
 # Link dotfiles

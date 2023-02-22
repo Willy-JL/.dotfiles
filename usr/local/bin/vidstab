@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+import subprocess
+import tempfile
+import argparse
+import sys
+import os
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Stabilize a video")
+    parser.add_argument("inputs",           metavar="inputs",                   nargs="*",      type=str,   default=None, help="Paths to input video files")
+    parser.add_argument("-c", "--crop",     metavar="style",   dest="crop",     required=False, type=int,   default=0,    help="0 = black borders, 1 = compromise, 2 = no borders, default: 0")
+    parser.add_argument("-s", "--shake",    metavar="amount",  dest="shake",    required=False, type=int,   default=10,   help="Shakiness of the input video, 1 to 10, default: 10")
+    parser.add_argument("-a", "--accuracy", metavar="level",   dest="accuracy", required=False, type=int,   default=15,   help="Stabilization accuracy level, 1 to 15, default: 15")
+    parser.add_argument("-t", "--step",     metavar="region",  dest="step",     required=False, type=int,   default=1,    help="Analysis step size, 1 to 6, default: 1")
+    parser.add_argument("-m", "--smooth",   metavar="amount",  dest="smooth",   required=False, type=int,   default=20,   help="Frame count for smoothing, default: 20")
+    parser.add_argument("-n", "--contrast", metavar="value",   dest="contrast", required=False, type=float, default=0.3,  help="Minimum reference contrast threshold, 0 to 1, default: 0.3")
+    parser.add_argument("-z", "--zoom",     metavar="percent", dest="zoom",     required=False, type=int,   default=-10,  help="Zoom effect, can be negative, default: -10")
+    args = parser.parse_args()
+    print("Options:")
+    for key, value in vars(args).items():
+        if key != "inputs":
+            print(f"  {key} = {repr(value)}")
+
+    for input in args.inputs:
+        if not os.path.isfile(input):
+            print(f"\nInput file '{input}' does not exist!")
+            continue
+        print(f"\nStabilizing '{input}':")
+        output = input + ".stab.mp4"
+
+        with tempfile.NamedTemporaryFile(suffix=".mp4") as scaled, tempfile.NamedTemporaryFile(suffix=".rtf") as detect:
+            scaled = scaled.name
+            detect = detect.name
+
+            print("Scaling input...")
+            subprocess.check_call([
+                "ffmpeg", "-y",
+                "-hide_banner", "-loglevel", "error", "-stats",
+                "-i", input,
+                "-vf", "scale=trunc((iw*1.15)/2)*2:trunc(ow/a/2)*2",
+                "-pix_fmt", "yuv420p",
+                scaled
+            ])
+
+            print("Analyzing input file...")
+            subprocess.check_call([
+                "ffmpeg", "-y",
+                "-hide_banner", "-loglevel", "error", "-stats",
+                "-i", scaled,
+                "-vf", f"vidstabdetect=result={detect}:shakiness={args.shake}:accuracy={args.accuracy}:stepsize={args.step}:mincontrast={args.contrast}:show=0",
+                "-f", "null", "-"
+            ])
+
+            print("Transforming output file...")
+            subprocess.check_call([
+                "ffmpeg", "-y",
+                "-hide_banner", "-loglevel", "error", "-stats",
+                "-i", scaled,
+                "-vf", f"vidstabtransform=input={detect}:smoothing={args.smooth}:crop=black:zoom={args.zoom}:optzoom={args.crop}:interpol=linear,unsharp=5:5:0.8:3:3:0.4",
+                output
+            ])
+
+            print(f"Output was saved to '{output}'")
